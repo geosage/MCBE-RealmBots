@@ -32,6 +32,9 @@ def start(client, bot, relaychannel, joinlogschannel, cmdlogschannel):
         if cmdlogschannel != False:
             cmdlogschannelobject = bot.get_channel(cmdlogschannel)
 
+        @On(client, 'error')
+        def handle(err):
+            print(f"An error occurred: {err}")
 
         print("joining...")
         @On(client, 'join')

@@ -18,20 +18,24 @@ clients = {}
 chatrelaychannels = []
 
 def createclient(ip, port):
-    botclient = bedrock.createClient({
-            'host': ip,
-            'port': int(port),
-            'profilesFolder': "./authCache",
-            'skipPing': True,
-            'skinData': {
-                'CurrentInputMode': 3,
-                'DefaultInputMode': 3,
-                'DeviceModel': 'Xbox Series X',
-                'DeviceOS': 11
-            }
-        })
-
-    return botclient
+    try:
+        botclient = bedrock.createClient({
+                'host': ip,
+                'port': int(port),
+                'profilesFolder': "./authCache",
+                'skipPing': True,
+                'skinData': {
+                    'CurrentInputMode': 3,
+                    'DefaultInputMode': 3,
+                    'DeviceModel': 'Xbox Series X',
+                    'DeviceOS': 11
+                }
+            })
+        return botclient
+    except Exception as e:
+        print(f"Connection attempt failed: {e}")
+        return None
+        
 
 
 def makebotjoin(realmid, index):
@@ -41,29 +45,31 @@ def makebotjoin(realmid, index):
 
         # Create the client and store it in the dictionary with the realm index as the key
         client = createclient(ip, port)
-        clients[index] = client
+        if client != None:
+            clients[index] = client
 
 
-        with open('configs/realminfo.json') as temp_json_file:
-            data = json.load(temp_json_file)
+            with open('configs/realminfo.json') as temp_json_file:
+                data = json.load(temp_json_file)
 
-            # Check if the things are enabled
-            if data[f"realm{index}"]["relayenabled"] == "True":
-                relaychannel = data[f"realm{index}"]["relaychannel"] 
-            else: relaychannel = False
+                # Check if the things are enabled
+                if data[f"realm{index}"]["relayenabled"] == "True":
+                    relaychannel = data[f"realm{index}"]["relaychannel"] 
+                else: relaychannel = False
 
-            if data[f"realm{index}"]["cmdlogsenabled"] == "True":
-                cmdlogschannel = data[f"realm{index}"]["cmdlogschannel"]
-            else: cmdlogschannel = False
+                if data[f"realm{index}"]["cmdlogsenabled"] == "True":
+                    cmdlogschannel = data[f"realm{index}"]["cmdlogschannel"]
+                else: cmdlogschannel = False
 
-            if data[f"realm{index}"]["joinlogsenabled"] == "True":
-                joinlogschannel = data[f"realm{index}"]["joinlogschannel"]
-            else: joinlogschannel = False
+                if data[f"realm{index}"]["joinlogsenabled"] == "True":
+                    joinlogschannel = data[f"realm{index}"]["joinlogschannel"]
+                else: joinlogschannel = False
 
 
-        # Start the Bot Up
-
-        ingamebot.start(client, bot, relaychannel, joinlogschannel, cmdlogschannel)
+            # Start the Bot Up
+            ingamebot.start(client, bot, relaychannel, joinlogschannel, cmdlogschannel)
+        else:
+            return
     except Exception as e:
         print(f"An error occured: {e}")
         return
