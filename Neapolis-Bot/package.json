@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@azure/msal-node": "^1.18.0",
+    "axios": "^1.4.0",
+    "bedrock-protocol": "^3.30.0"
+  }
+}
