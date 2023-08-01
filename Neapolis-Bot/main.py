@@ -46,7 +46,7 @@ def makebotjoin(realmid, index):
         # Create the client and store it in the dictionary with the realm index as the key
         client = createclient(ip, port)
         if client != None:
-            clients[index] = client
+            clients[index] = client # With this clients index thing. Have it so when there is a disconnect event it deletes the client id by causing a function over here or just updating. Ask ChatGPT
 
 
             with open('configs/realminfo.json') as temp_json_file:
