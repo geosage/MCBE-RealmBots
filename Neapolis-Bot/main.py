@@ -652,8 +652,8 @@ async def unbantimer():
 
 
 
-#Setup loop to run every 1 minute
-@tasks.loop(minutes=2)
+#Setup loop to run every 3 minutes
+@tasks.loop(minutes=3)
 async def tenminutetimer():
     global chatrelaychannels
     chatrelaychannels = []
