@@ -596,8 +596,8 @@ async def refrestokentimer():
     print("Started Refreshing the XBL3.0 Token!")
     tokenstuff.refreshtoken()
 
-#Setup loop to unban every 1 hour
-@tasks.loop(hours=1)
+#Setup loop to unban every 2 hours and reconnect bot
+@tasks.loop(hours=2)
 async def unbantimer():
     currenttime = int(time.time())
     print("Starting Unbans")
@@ -631,6 +631,24 @@ async def unbantimer():
                 unbanchannel = bot.get_channel(data["unban"])
 
             await unbanchannel.send(embed=embedtosend)
+    
+
+    #Reconnect the bot
+    with open('configs/realminfo.json') as temp_json_file:
+        data = json.load(temp_json_file)
+
+        #Set the chatrelaychannels
+        for i in range(data["realmcount"]):
+
+            index = i + 1
+            if index in clients:
+                clients[index].disconnect()
+                clients.pop(index)
+                realmidtojoin = data[f"realm{index}"]["realmid"]
+                makebotjoin(realmidtojoin, index)
+                print("Reconnected one of the clients.")
+            else:
+                print("One of the clients is not connected so doesnt need reconnecting.")
 
 
 
@@ -669,7 +687,7 @@ async def tenminutetimer():
 
         print(f'Updated the chatrelay channels: {chatrelaychannels}')
     
-refrestokentimer.start()
+'''refrestokentimer.start()'''
 # ---------------------------------------------------------------------------------------------------------------
 
 #Get messages to send for chat relay from discord to realm

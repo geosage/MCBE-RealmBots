@@ -151,7 +151,10 @@ def getrealmconnection(realmid):
 
     # Parse the JSON data to get realms the user owns
     jsondata = response.json()
+    print(jsondata)
+    print("address:")
     address = jsondata["address"].split(":")
+    print(address)
     ip = address[0]
     port = address[1]
 
