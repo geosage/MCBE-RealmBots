@@ -33,7 +33,7 @@ def start(client, bot, relaychannel, joinlogschannel, cmdlogschannel):
             cmdlogschannelobject = bot.get_channel(cmdlogschannel)
 
         @On(client, 'error')
-        def handle(err):
+        def handle(_, err):
             print(f"An error occurred: {err}")
 
         print("joining...")
